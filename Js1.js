@@ -1,0 +1,45 @@
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Canvasサイズ設定
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// ボールのプロパティ
+const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 30,
+            dx: 4, // x方向の移動速度
+            dy: 4  // y方向の移動速度
+        };
+
+function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'blue';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+function updateBallPosition() {
+            // ボールの位置を更新
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // 壁に当たったときのバウンス
+            if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                ball.dx = -ball.dx;
+            }
+            if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+                ball.dy = -ball.dy;
+            }
+        }
+function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvasをクリア
+            drawBall(); // ボールを描画
+            updateBallPosition(); // ボールの位置を更新
+            requestAnimationFrame(gameLoop); // 次のフレームをリクエスト
+        }
+gameLoop();
